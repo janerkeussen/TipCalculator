@@ -8,15 +8,84 @@
 import UIKit
 
 class BillInputView: UIView {
+    private let titleView: TitleView = {
+        let title = TitleView()
+        title.configure(topText: "Enter", bottomText: "your bill")
+        return title
+    }()
+    
+    private let textFieldContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.addCornerRadius(radius: 8.0)
+        return view
+    }()
+    
+    private let currencyLabel: UILabel = {
+        let label = LabelFactory.build(
+            text: "$0", font: ThemeFont.bold(of: 24)
+        )
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        return label
+    }()
+    
+    private lazy var textField: UITextField = {
+        let textfield = UITextField()
+        textfield.borderStyle = .none
+        textfield.font = ThemeFont.demiBold(of: 28)
+        textfield.keyboardType = .decimalPad
+        textfield.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        textfield.tintColor = ThemeColor.text
+        textfield.textColor = ThemeColor.text
+        //Add toolbar
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
+        toolbar.barStyle = .default
+        toolbar.sizeToFit()
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonTapped))
+        toolbar.items = [
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            doneButton
+        ]
+        toolbar.isUserInteractionEnabled = true
+        textfield.inputAccessoryView = toolbar
+        return textfield
+    }()
     
     init() {
         super.init(frame: .zero)
         layout()
     }
     
+    @objc private func doneButtonTapped() {
+        textField.endEditing(true)
+    }
     
     private func layout() {
-        backgroundColor = .red
+        [titleView, textFieldContainerView].forEach { addSubview($0) }
+        titleView.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.centerY.equalTo(textFieldContainerView.snp.centerY)
+            $0.width.equalTo(68)
+            $0.trailing.equalTo(textFieldContainerView.snp.leading).offset(-24)
+        }
+        
+        textFieldContainerView.snp.makeConstraints {
+            $0.top.trailing.bottom.equalToSuperview()
+        }
+        
+        [currencyLabel, textField].forEach { textFieldContainerView.addSubview($0) }
+        
+        currencyLabel.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.leading.equalTo(textFieldContainerView.snp.leading).offset(16)
+            
+        }
+        
+        textField.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.leading.equalTo(currencyLabel.snp.trailing).offset(16)
+            make.trailing.equalTo(textFieldContainerView.snp.trailing).offset(16)
+        }
     }
     
     required init?(coder: NSCoder) {
