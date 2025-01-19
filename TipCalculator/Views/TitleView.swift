@@ -36,7 +36,7 @@ class TitleView: UIView {
         ])
         stackView.axis = .vertical
         stackView.alignment = .leading
-        stackView.spacing = 4
+        stackView.spacing = -4
         return stackView
     }()
     
