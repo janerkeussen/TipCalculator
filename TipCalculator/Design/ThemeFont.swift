@@ -13,7 +13,7 @@ struct ThemeFont {
         return UIFont(name: "AvenirNext-Regular", size: size) ?? .systemFont(ofSize: size)
     }
     
-    static func bold(of size: CGFloat) -> UIFont {
+    static func bold(ofSize size: CGFloat) -> UIFont {
         return UIFont(name: "AvenirNext-Bold", size: size) ?? .systemFont(ofSize: size)
     }
     

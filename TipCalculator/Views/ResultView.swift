@@ -19,7 +19,7 @@ class ResultView: UIView {
         let text = NSMutableAttributedString(string: "$0", attributes: [
             .font: ThemeFont.demiBold(of: 48)
         ])
-        text.addAttributes([.font: ThemeFont.bold(of: 24)], range: NSMakeRange(0, 1))
+        text.addAttributes([.font: ThemeFont.bold(ofSize: 24)], range: NSMakeRange(0, 1))
         label.attributedText = text
         return label
         

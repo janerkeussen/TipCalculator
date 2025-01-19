@@ -10,7 +10,7 @@ import UIKit
 class TitleView: UIView {
     private let topLabel: UILabel = {
         let label = LabelFactory.build(text: "Top",
-                                       font: ThemeFont.bold(of: 18),
+                                       font: ThemeFont.bold(ofSize: 18),
                                        textAlignment: .left)
         return label
     }()

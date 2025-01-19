@@ -35,7 +35,7 @@ class TipInputtView: UIView {
     private lazy var customTipButton: UIButton = {
         let button = UIButton()
         button.setTitle("Custom tip", for: .normal)
-        button.titleLabel?.font = ThemeFont.bold(of: 20)
+        button.titleLabel?.font = ThemeFont.bold(ofSize: 20)
         button.backgroundColor = ThemeColor.primaryColor
         button.tintColor = .white
         button.addCornerRadius(radius: 8.0)
@@ -91,7 +91,7 @@ class TipInputtView: UIView {
         button.backgroundColor = ThemeColor.primaryColor
         button.addCornerRadius(radius: 8)
         let text = NSMutableAttributedString(string: tip.stringValue, attributes: [
-            .font: ThemeFont.bold(of: 20),
+            .font: ThemeFont.bold(ofSize: 20),
             .foregroundColor: UIColor.white
         ])
         text.addAttributes([.font: ThemeFont.demiBold(of: 14)], range: NSMakeRange(2, 1))
