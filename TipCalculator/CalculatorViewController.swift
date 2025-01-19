@@ -22,6 +22,7 @@ class CalculatorViewController: UIViewController {
             billInputtView,
             tipInputtView,
             splitInputtView,
+            UIView()
         ])
         
         stackView.axis = .vertical
@@ -38,7 +39,7 @@ class CalculatorViewController: UIViewController {
     }
     
     private func setupViewsLayout() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = ThemeColor.background
         view.addSubview(stackView)
         
         stackView.snp.makeConstraints {
