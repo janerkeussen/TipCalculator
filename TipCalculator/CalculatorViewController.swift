@@ -4,6 +4,8 @@
 //
 //  Created by Zhanerke Ussen on 18/01/2025.
 //
+
+import Combine
 import SnapKit
 import UIKit
 
@@ -31,11 +33,36 @@ class CalculatorViewController: UIViewController {
         return stackView
     }()
     
+    private let viewModel = CalculatorViewModel()
+    private var cancellables = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         setupViewsLayout()
+        bind()
+    }
+    
+    private func bind() {
+        
+        let input = CalculatorViewModel.Input(
+            billPublisher: billInputtView.billValuePublsiher,
+            tipPublisher: Just(.tenPercent).eraseToAnyPublisher(),
+            splitPublisher: Just(2).eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.updatingViewPublisher.sink { result in
+            print("Result is:  ", result)
+        }
+        .store(in: &cancellables)
+        
+        billInputtView.billValuePublsiher.sink { billAmount in
+            print("Bill:", billAmount)
+        }
+        .store(in: &cancellables)
+        
     }
     
     private func setupViewsLayout() {

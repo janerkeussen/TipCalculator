@@ -5,6 +5,8 @@
 //  Created by Zhanerke Ussen on 18/01/2025.
 //
 
+import Combine
+import CombineCocoa
 import UIKit
 
 class BillInputView: UIView {
@@ -23,7 +25,7 @@ class BillInputView: UIView {
     
     private let currencyLabel: UILabel = {
         let label = LabelFactory.build(
-            text: "$0", font: ThemeFont.bold(ofSize: 24)
+            text: "$", font: ThemeFont.bold(ofSize: 24)
         )
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
@@ -51,9 +53,24 @@ class BillInputView: UIView {
         return textfield
     }()
     
+    private var cancellables = Set<AnyCancellable>()
+    private let billSubject: PassthroughSubject<Double, Never> = .init()
+    var billValuePublsiher: AnyPublisher<Double, Never> {
+        return billSubject.eraseToAnyPublisher()
+    }
+    
     init() {
         super.init(frame: .zero)
         layout()
+        observe()
+    }
+
+    private func observe() {
+        textField.textPublisher.sink { [unowned self] text in
+            self.billSubject.send(text?.doubleValue ?? 0)
+            print("text: ", text)
+        }
+        .store(in: &cancellables)
     }
     
     @objc private func doneButtonTapped() {
