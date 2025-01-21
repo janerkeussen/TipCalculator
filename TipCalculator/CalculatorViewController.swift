@@ -54,14 +54,10 @@ class CalculatorViewController: UIViewController {
         let output = viewModel.transform(input: input)
         
         output.updatingViewPublisher.sink { result in
-            print("Result is:  ", result)
+            print(result)
         }
         .store(in: &cancellables)
         
-        billInputtView.billValuePublsiher.sink { billAmount in
-            print("Bill:", billAmount)
-        }
-        .store(in: &cancellables)
     }
     
     private func setupViewsLayout() {
@@ -95,7 +91,5 @@ class CalculatorViewController: UIViewController {
             $0.height.equalTo(56)
         }
     }
-
-
 }
 

@@ -21,26 +21,45 @@ class CalculatorViewModel {
         let updatingViewPublisher: AnyPublisher<Result, Never>
     }
     
-    
-    let result = Result(amountPerPerson: 20, totalBill: 40, totalTip: 5)
-    
     func transform(input: Input) -> Output {
         
-        input.tipPublisher.sink { Tip in
-            print("percent tipped", Tip)
-        }
-        .store(in: &cancellables)
+        let updateViewPublisher = Publishers.CombineLatest3(
+            input.billPublisher,
+            input.tipPublisher,
+            input.splitPublisher)
+            .flatMap { [unowned self ] (bill, tip, split) in
+                let result = calculateResult(bill: bill, tip: tip, split: split)
+                return Just(result)
+            }.eraseToAnyPublisher()
         
-        input.splitPublisher.sink { split in
-            print("Split among ", split)
-        }
-        .store(in: &cancellables)
-        
-        return Output(updatingViewPublisher: Just(result).eraseToAnyPublisher())
+        return Output(updatingViewPublisher: updateViewPublisher)
     }
     
-    private func calculatePerPersonAmount() {
+    private func calculateResult(bill: Double, tip: Tip, split: Int) -> Result {
+        let tipAmount = calculateTipAmount(bill: bill, tip: tip)
         
+        let totalBill = bill + tipAmount
+        let amountPerPerson = totalBill / Double(split)
+        
+        return Result(amountPerPerson: amountPerPerson, totalBill: totalBill, totalTip: tipAmount)
     }
     
+    private func calculateTipAmount(bill: Double, tip: Tip) -> Double {
+        var tipAmount = 0.0
+        
+        switch tip {
+        case .tenPercent:
+            tipAmount = bill * 0.1
+        case .fifteenPercent:
+            tipAmount = bill * 0.15
+        case .twentyPercent:
+            tipAmount = bill * 0.2
+        case .custom(let value):
+            return Double(value)
+        default:
+            return tipAmount
+        }
+        
+        return tipAmount
+    }
 }
