@@ -47,7 +47,7 @@ class CalculatorViewController: UIViewController {
         
         let input = CalculatorViewModel.Input(
             billPublisher: billInputtView.billValuePublsiher,
-            tipPublisher: Just(.tenPercent).eraseToAnyPublisher(),
+            tipPublisher: tipInputtView.tipValuePublisher,
             splitPublisher: Just(2).eraseToAnyPublisher()
         )
         
@@ -62,7 +62,6 @@ class CalculatorViewController: UIViewController {
             print("Bill:", billAmount)
         }
         .store(in: &cancellables)
-        
     }
     
     private func setupViewsLayout() {

@@ -26,6 +26,10 @@ class CalculatorViewModel {
     
     func transform(input: Input) -> Output {
         
+        input.tipPublisher.sink { Tip in
+            print("percent tipped", Tip)
+        }.store(in: &cancellables)
+        
         return Output(updatingViewPublisher: Just(result).eraseToAnyPublisher())
     }
     
