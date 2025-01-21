@@ -5,6 +5,8 @@
 //  Created by Zhanerke Ussen on 18/01/2025.
 //
 
+import Combine
+import CombineCocoa
 import UIKit
 
 class SplitInputtView: UIView {
@@ -16,11 +18,19 @@ class SplitInputtView: UIView {
     
     private lazy var decrementButton: UIButton = {
         let button = buildButton(text: "-", corners: [.layerMinXMaxYCorner, .layerMinXMinYCorner])
+        button.tapPublisher.flatMap({ [unowned self] _ in
+            Just(splitValueSubject.value == 1 ? 1 : splitValueSubject.value - 1)
+        }).assign(to: \.value, on: splitValueSubject)
+        .store(in: &cancellables)
         return button
     }()
     
     private lazy var incrementButton: UIButton = {
         let button = buildButton(text: "+", corners: [.layerMaxXMinYCorner, .layerMaxXMaxYCorner])
+        button.tapPublisher.flatMap { [unowned self] _ in
+            Just(splitValueSubject.value + 1)
+        }.assign(to: \.value, on: splitValueSubject)
+        .store(in: &cancellables)
         return button
     }()
     
@@ -39,11 +49,26 @@ class SplitInputtView: UIView {
         return stackView
     }()
     
+    private var peopleCount = 1
+    
+    private var cancellables = Set<AnyCancellable>()
+    private var splitValueSubject = CurrentValueSubject<Int, Never>(1)
+    var splitValuePublisher: AnyPublisher<Int, Never> {
+        return splitValueSubject.removeDuplicates().eraseToAnyPublisher()
+    }
+    
     init() {
         super.init(frame: .zero)
         layout()
+        observe()
     }
     
+    private func observe() {
+        splitValueSubject.sink { [unowned self] count in
+            quantityLabel.text = count.stringValue
+        }.store(in: &cancellables)
+        
+    }
     
     private func layout() {
         [titleView, stepperStackView].forEach { addSubview($0) }

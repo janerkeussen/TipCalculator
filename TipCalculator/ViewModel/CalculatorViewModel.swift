@@ -28,7 +28,13 @@ class CalculatorViewModel {
         
         input.tipPublisher.sink { Tip in
             print("percent tipped", Tip)
-        }.store(in: &cancellables)
+        }
+        .store(in: &cancellables)
+        
+        input.splitPublisher.sink { split in
+            print("Split among ", split)
+        }
+        .store(in: &cancellables)
         
         return Output(updatingViewPublisher: Just(result).eraseToAnyPublisher())
     }
