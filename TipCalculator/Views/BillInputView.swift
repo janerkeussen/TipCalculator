@@ -72,6 +72,11 @@ class BillInputView: UIView {
         .store(in: &cancellables)
     }
     
+    func reset() {
+        textField.text = nil
+        billSubject.send(0)
+    }
+    
     @objc private func doneButtonTapped() {
         textField.endEditing(true)
     }

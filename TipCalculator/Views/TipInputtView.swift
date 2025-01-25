@@ -84,6 +84,10 @@ class TipInputtView: UIView {
         observe()
     }
     
+    func reset() {
+        tipSubject.send(.none)
+    }
+    
     private func handleCustomTipButtonTap() {
         let alert: UIAlertController = {
             let alert = UIAlertController(

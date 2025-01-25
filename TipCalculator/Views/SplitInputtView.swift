@@ -63,6 +63,10 @@ class SplitInputtView: UIView {
         observe()
     }
     
+    func reset() {
+        splitValueSubject.send(1)
+    }
+    
     private func observe() {
         splitValueSubject.sink { [unowned self] count in
             quantityLabel.text = count.stringValue

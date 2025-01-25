@@ -80,7 +80,22 @@ class CalculatorViewController: UIViewController {
         }.store(in: &cancellables)
         
         output.resetCalculatorPublisher.sink { [weak self] _ in
-            print("Reset")
+            self?.billInputtView.reset()
+            self?.tipInputtView.reset()
+            self?.splitInputtView.reset()
+            
+            UIView.animate(
+                withDuration: 0.15,
+                delay: 0,
+                usingSpringWithDamping: 5.0,
+                initialSpringVelocity: 0.5,
+                options: .curveEaseInOut) {
+                    self?.logoView.transform = .init(scaleX: 1.25, y: 1.25)
+                } completion: { _ in
+                    UIView.animate(withDuration: 0.1) {
+                        self?.logoView.transform = .identity
+                    }
+                }
         }.store(in: &cancellables)
     }
     
