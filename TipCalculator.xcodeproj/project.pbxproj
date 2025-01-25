@@ -11,6 +11,7 @@
 		73023D182D3C77E300B3D80F /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 73023D172D3C77E300B3D80F /* SnapKit */; };
 		73023D1A2D3C77F300B3D80F /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 73023D192D3C77F300B3D80F /* CombineCocoa */; };
 		73023D1C2D3C781A00B3D80F /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 73023D1B2D3C781A00B3D80F /* CombineCocoa */; };
+		73023D4A2D4563ED00B3D80F /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 73E2E1812D3C6D8E007039AE /* SnapKit */; };
 		73E2E17F2D3C6D61007039AE /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 73E2E17E2D3C6D61007039AE /* CombineCocoa */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73023D4A2D4563ED00B3D80F /* SnapKit in Frameworks */,
 				73023D1A2D3C77F300B3D80F /* CombineCocoa in Frameworks */,
 				73023D162D3C77C700B3D80F /* SnapshotTesting in Frameworks */,
 			);

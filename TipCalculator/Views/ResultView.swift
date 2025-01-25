@@ -67,6 +67,19 @@ class ResultView: UIView {
         layout()
     }
     
+    func configure(result: Result) {
+        let totalPerPersonText = NSMutableAttributedString(string: result.amountPerPerson.currencyFormatted, attributes: [
+            .font: ThemeFont.bold(ofSize: 48)
+        ])
+        totalPerPersonText.addAttributes([
+            .font: ThemeFont.bold(ofSize: 24)
+        ], range: NSMakeRange(0, 1))
+        amountPerPersonLabel.attributedText = totalPerPersonText
+        
+        totalAmountView.configure(with: result.totalBill.currencyFormatted)
+        tipAmountView.configure(with: result.totalTip.currencyFormatted)
+    }
+    
     private func layout() {
         backgroundColor = ThemeColor.background
         

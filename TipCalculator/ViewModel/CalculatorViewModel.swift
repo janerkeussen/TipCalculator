@@ -10,15 +10,22 @@ import Combine
 class CalculatorViewModel {
     
     private var cancellables = Set<AnyCancellable>()
+    private var audioPlayerService: AudioPlayerService
     
     struct Input {
         let billPublisher: AnyPublisher<Double, Never>
         let tipPublisher: AnyPublisher<Tip, Never>
         let splitPublisher: AnyPublisher<Int, Never>
+        let logoViewPublisher: AnyPublisher<Void, Never>
     }
     
     struct Output {
         let updatingViewPublisher: AnyPublisher<Result, Never>
+        let resetCalculatorPublisher: AnyPublisher<Void, Never>
+    }
+    
+    init(audioPlayerService: AudioPlayerService = DefaultAudioPlayer()) {
+        self.audioPlayerService = audioPlayerService
     }
     
     func transform(input: Input) -> Output {
@@ -32,7 +39,13 @@ class CalculatorViewModel {
                 return Just(result)
             }.eraseToAnyPublisher()
         
-        return Output(updatingViewPublisher: updateViewPublisher)
+        let resetPublisher = input.logoViewPublisher.handleEvents(receiveOutput: { [weak self] void in
+            self?.audioPlayerService.playSound()
+        }).flatMap { _ in
+            Just(Void())
+        }.eraseToAnyPublisher()
+        
+        return Output(updatingViewPublisher: updateViewPublisher, resetCalculatorPublisher: resetPublisher)
     }
     
     private func calculateResult(bill: Double, tip: Tip, split: Int) -> Result {

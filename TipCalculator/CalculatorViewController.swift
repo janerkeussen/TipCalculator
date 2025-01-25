@@ -36,28 +36,58 @@ class CalculatorViewController: UIViewController {
     private let viewModel = CalculatorViewModel()
     private var cancellables = Set<AnyCancellable>()
     
+    private lazy var viewTapPublisher: AnyPublisher<Void, Never> = {
+        let tapGesture = UITapGestureRecognizer(target: self, action: nil) //#selector(logoTapped)
+        view.addGestureRecognizer(tapGesture)
+        return tapGesture.tapPublisher.flatMap { _ in
+            Just(Void())
+        }.eraseToAnyPublisher()
+    }()
+    
+    private lazy var logoViewTapPublisher: AnyPublisher<Void, Never> = { [weak self] in
+        let tapGesture = UITapGestureRecognizer(target: self, action: nil)
+        tapGesture.numberOfTapsRequired = 2
+        self?.logoView.addGestureRecognizer(tapGesture)
+        return tapGesture.tapPublisher.flatMap { _ in
+            Just(Void())
+        }.eraseToAnyPublisher()
+    }()
+    
+    @objc func logoTapped() {
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         setupViewsLayout()
         bind()
+        observe()
     }
     
     private func bind() {
-        
         let input = CalculatorViewModel.Input(
             billPublisher: billInputtView.billValuePublsiher,
             tipPublisher: tipInputtView.tipValuePublisher,
-            splitPublisher: splitInputtView.splitValuePublisher
+            splitPublisher: splitInputtView.splitValuePublisher,
+            logoViewPublisher: logoViewTapPublisher
         )
         
         let output = viewModel.transform(input: input)
         
-        output.updatingViewPublisher.sink { result in
-            print(result)
-        }
-        .store(in: &cancellables)
+        output.updatingViewPublisher.sink { [weak self] result in
+            self?.resultView.configure(result: result)
+        }.store(in: &cancellables)
         
+        output.resetCalculatorPublisher.sink { [weak self] _ in
+            print("Reset")
+        }.store(in: &cancellables)
+    }
+    
+    private func observe() {
+        viewTapPublisher.sink { [weak self] _ in
+            self?.view.endEditing(true)
+        }.store(in: &cancellables)
     }
     
     private func setupViewsLayout() {

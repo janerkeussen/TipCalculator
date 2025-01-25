@@ -42,6 +42,16 @@ class AmountView: UIView {
         layout()
     }
     
+    func configure(with amount: String) {
+        let amountText = NSMutableAttributedString(string: amount, attributes: [
+            .font: ThemeFont.bold(ofSize: 24)
+        ])
+        amountText.addAttributes([
+            .font: ThemeFont.bold(ofSize: 16)
+        ], range: NSMakeRange(0, 1))
+        amountLabel.attributedText = amountText
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
