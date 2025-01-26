@@ -50,6 +50,7 @@ class BillInputView: UIView {
         ]
         toolbar.isUserInteractionEnabled = true
         textfield.inputAccessoryView = toolbar
+        textfield.accessibilityIdentifier = ScreenIdentifier.BillInputView.textField.rawValue
         return textfield
     }()
     

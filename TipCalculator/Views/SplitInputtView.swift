@@ -22,6 +22,7 @@ class SplitInputtView: UIView {
             Just(splitValueSubject.value == 1 ? 1 : splitValueSubject.value - 1)
         }).assign(to: \.value, on: splitValueSubject)
         .store(in: &cancellables)
+        button.accessibilityIdentifier = ScreenIdentifier.SplitInputView.decrementButton.rawValue
         return button
     }()
     
@@ -31,6 +32,7 @@ class SplitInputtView: UIView {
             Just(splitValueSubject.value + 1)
         }.assign(to: \.value, on: splitValueSubject)
         .store(in: &cancellables)
+        button.accessibilityIdentifier = ScreenIdentifier.SplitInputView.incrementButton.rawValue
         return button
     }()
     
@@ -38,6 +40,7 @@ class SplitInputtView: UIView {
         let label = LabelFactory.build(
             text: "1", font: ThemeFont.bold(ofSize: 20), backgroundColor: .white
         )
+        label.accessibilityIdentifier = ScreenIdentifier.SplitInputView.quantityValueLabel.rawValue
         return label
     }()
     
