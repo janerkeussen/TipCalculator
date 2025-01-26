@@ -23,7 +23,7 @@ final class TipCalculatorSnapshotTests: XCTestCase {
         let view = LogoView()
         
         //then
-        assertSnapshot(matching: view, as: .image(size: size))
+        assertSnapshot(of: view, as: .image(size: size))
     }
     
     func testInitialResultView() {
@@ -34,7 +34,7 @@ final class TipCalculatorSnapshotTests: XCTestCase {
         let view = ResultView()
         
         //then
-        assertSnapshot(matching: view, as: .image(size: size))
+        assertSnapshot(of: view, as: .image(size: size))
     }
     
     func testResultViewWithValues() {
@@ -47,7 +47,7 @@ final class TipCalculatorSnapshotTests: XCTestCase {
         view.configure(result: result)
         
         //then
-        assertSnapshot(matching: view, as: .image(size: size))
+        assertSnapshot(of: view, as: .image(size: size))
     }
     
     func testInitialBillInputView() {
@@ -57,7 +57,7 @@ final class TipCalculatorSnapshotTests: XCTestCase {
         //when
         let view = BillInputView()
         
-        assertSnapshot(matching: view, as: .image(size: size))
+        assertSnapshot(of: view, as: .image(size: size))
     }
     
     func testBillInputViewWithValues() {
@@ -70,7 +70,7 @@ final class TipCalculatorSnapshotTests: XCTestCase {
         textField?.text = "500"
         
         //then
-        assertSnapshot(matching: view, as: .image(size: size))
+        assertSnapshot(of: view, as: .image(size: size))
     }
     
     func testInitialTipInputView() {
@@ -81,7 +81,7 @@ final class TipCalculatorSnapshotTests: XCTestCase {
         let view = TipInputtView()
         
         //then
-        assertSnapshot(matching: view, as: .image(size: size))
+        assertSnapshot(of: view, as: .image(size: size))
     }
     
     func testTipInputViewWithSeclection() {
@@ -94,7 +94,7 @@ final class TipCalculatorSnapshotTests: XCTestCase {
         button?.sendActions(for: .touchUpInside)
         
         //then
-        assertSnapshot(matching: view, as: .image(size: size))
+        assertSnapshot(of: view, as: .image(size: size))
     }
     
     func testInitialSplitInputView() {
@@ -105,7 +105,7 @@ final class TipCalculatorSnapshotTests: XCTestCase {
         let view = SplitInputtView()
         
         //then
-        assertSnapshot(matching: view, as: .image(size: size))
+        assertSnapshot(of: view, as: .image(size: size))
     }
     
     func testSplitInputViewWithSelection() {
@@ -119,7 +119,7 @@ final class TipCalculatorSnapshotTests: XCTestCase {
     
         
         //then
-        assertSnapshot(matching: view, as: .image(size: size))
+        assertSnapshot(of: view, as: .image(size: size))
     }
 }
 
