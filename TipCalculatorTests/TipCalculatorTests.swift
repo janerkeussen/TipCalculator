@@ -14,11 +14,12 @@ final class TipCalculatorTests: XCTestCase  {
     //sut
     private var sut: CalculatorViewModel!
     private var cancellables: Set<AnyCancellable>!
-    private var logoViewTapSubject = PassthroughSubject<Void, Never>()
+    private var logoViewTapSubject: PassthroughSubject<Void, Never>!
     
     override func setUp() {
         sut = CalculatorViewModel()
         cancellables = .init()
+        logoViewTapSubject = PassthroughSubject<Void, Never>()
         super.setUp()
     }
     
@@ -26,6 +27,7 @@ final class TipCalculatorTests: XCTestCase  {
         super.tearDown()
         sut = nil
         cancellables = nil
+        logoViewTapSubject = nil
     }
     
     func testResultWithoutTipForOnePerson() {
@@ -96,6 +98,30 @@ final class TipCalculatorTests: XCTestCase  {
         }.store(in: &cancellables)
     }
     
+    func testSoundPlayedAndCalculatorResetOnLogoViewTap() {
+        //Given
+        let player = MockAudioPlayerService()
+        sut = CalculatorViewModel(audioPlayerService: player)
+        
+        let bill: Double = 100
+        let tip: Tip = .none
+        let split: Int = 2
+        let input = buildInput(bill: bill, tip: tip, split: split)
+        let output = sut.transform(input: input)
+        let expectation = XCTestExpectation(description: "reset calculator called")
+        let expectation2 = player.expectation
+       
+        //Then
+        output.resetCalculatorPublisher.sink { _ in
+            XCTAssertEqual(player.soundsPlayed, true)
+            expectation.fulfill()
+        }.store(in: &cancellables)
+        
+        //When
+        logoViewTapSubject.send(())
+        wait(for: [expectation, expectation2], timeout: 1.0)
+    }
+    
     private func buildInput(bill: Double, tip: Tip, split: Int) -> CalculatorViewModel.Input {
         .init(
             billPublisher: Just(bill).eraseToAnyPublisher(),
@@ -103,5 +129,15 @@ final class TipCalculatorTests: XCTestCase  {
             splitPublisher: Just(split).eraseToAnyPublisher(),
             logoViewPublisher: logoViewTapSubject.eraseToAnyPublisher()
         )
+    }
+}
+
+class MockAudioPlayerService: AudioPlayerService {
+    var expectation = XCTestExpectation(description: "Sound played!")
+    var soundsPlayed = false
+    
+    func playSound() {
+        soundsPlayed = true
+        expectation.fulfill()
     }
 }
